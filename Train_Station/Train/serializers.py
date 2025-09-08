@@ -36,3 +36,5 @@ class TrainScheduleSerializer(serializers.ModelSerializer):
         fields = ["id","train","starting_location","final_destination","departure_date","arrival_time","status",]
         read_only_fields = ["id"]
         
+
+    

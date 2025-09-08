@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Booking, Ticket
 from Train.models import Seat, TrainSchedule
 from Train.serializers import SeatSerializer, TrainScheduleSerializer
-
+import uuid
 
 class BookingSerializer(serializers.ModelSerializer):
 
@@ -23,8 +23,19 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = ["id","user","schedule","schedule_id","first_name","last_name","personal_number","email","phone","seat","seat_id","booking_time","status",]
-        read_only_fields = ["id", "booking_time"]
+        read_only_fields = ["id","user", "booking_time"]
+    
+    def create(self, validated_data):
 
+        booking = Booking.objects.create(**validated_data)
+
+        Ticket.objects.create(
+            booking=booking,
+            train_schedule=booking.schedule,
+            ticket_number=str(uuid.uuid4().hex[:16]).upper()
+        )
+
+        return booking
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -34,3 +45,5 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = ["id","booking","train_schedule","ticket_number","issued_at",]
         read_only_fields = ["id", "ticket_number", "issued_at"]
+    
+    
