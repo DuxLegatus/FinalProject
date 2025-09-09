@@ -11,6 +11,7 @@ class BookingListCreateView(APIView):
         return [IsAuthenticated()]
     def get(self,request):
         bookings = Booking.objects.all().filter(user=request.user,status="confirmed")
+        
         serializer = BookingSerializer(bookings,many = True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     

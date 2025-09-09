@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser,AllowAny
+from booking.models import Booking
 
 
 class TrainListCreateAPIView(APIView):
@@ -45,7 +46,34 @@ class CarriageListCreateAPIView(APIView):
 
 class SeatListAPIView(APIView):
     def get(self, request):
+        schedule_id = request.query_params.get("schedule")
+        available = request.query_params.get("available")
+        class_type = request.query_params.get("class_type")
+
         seats = Seat.objects.all()
+
+        if schedule_id:
+            seats = seats.filter(carriage__train__schedules__id=schedule_id)
+
+        if available == "true":
+            booked_seats = Booking.objects.filter(
+                schedule_id=schedule_id, 
+                status="confirmed"
+            ).values_list("seat_id", flat=True)
+
+            seats = seats.exclude(id__in=booked_seats)
+
+        elif available == "false":
+            booked_seats = Booking.objects.filter(
+                schedule_id=schedule_id, 
+                status="confirmed"
+            ).values_list("seat_id", flat=True)
+
+            seats = seats.filter(id__in=booked_seats)
+
+        if class_type in ["first", "second"]:
+            seats = seats.filter(carriage__class_type=class_type)
+
         serializer = SeatSerializer(seats, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -59,6 +87,15 @@ class TrainScheduleListCreateAPIView(APIView):
 
     def get(self,request):
         train_schedule = TrainSchedule.objects.all()
+        starting_location = request.query_params.get("starting_location")
+        final_destination = request.query_params.get("final_destination")
+        departure_date = request.query_params.get("departure_date")
+        if starting_location:
+            train_schedule = train_schedule.filter(starting_location__iexact=starting_location)
+        if final_destination:
+            train_schedule = train_schedule.filter(final_destination__iexact=final_destination)
+        if departure_date:
+            train_schedule = train_schedule.filter(departure_date__date=departure_date)
         serializer = TrainScheduleSerializer(train_schedule,many = True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     
