@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser,AllowAny
 from booking.models import Booking
+from .pagination import PaginationLimitOffset
 
 
 class TrainListCreateAPIView(APIView):
@@ -45,6 +46,7 @@ class CarriageListCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SeatListAPIView(APIView):
+    pagination_class = PaginationLimitOffset
     def get(self, request):
         schedule_id = request.query_params.get("schedule")
         available = request.query_params.get("available")
@@ -73,13 +75,15 @@ class SeatListAPIView(APIView):
 
         if class_type in ["first", "second"]:
             seats = seats.filter(carriage__class_type=class_type)
-
-        serializer = SeatSerializer(seats, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(seats, request, view=self)
+        serializer = SeatSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
 
 
 class TrainScheduleListCreateAPIView(APIView):
+    pagination_class = PaginationLimitOffset
     def get_permissions(self):
         if self.request.method == "POST":  
             return [IsAdminUser()]
@@ -96,8 +100,11 @@ class TrainScheduleListCreateAPIView(APIView):
             train_schedule = train_schedule.filter(final_destination__iexact=final_destination)
         if departure_date:
             train_schedule = train_schedule.filter(departure_date__date=departure_date)
-        serializer = TrainScheduleSerializer(train_schedule,many = True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(train_schedule, request, view=self)
+        serializer = TrainScheduleSerializer(page,many = True)
+        return paginator.get_paginated_response(serializer.data)
     
     def post(self,request):
         serializer = TrainScheduleSerializer(data = request.data)

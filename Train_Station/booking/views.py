@@ -4,16 +4,19 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import Booking,Ticket
 from .serializers import BookingSerializer,TicketSerializer
+from .pagination import PaginationLimitOffset
 # Create your views here.
 
 class BookingListCreateView(APIView):
+    pagination_class = PaginationLimitOffset
     def get_permissions(self):
         return [IsAuthenticated()]
     def get(self,request):
         bookings = Booking.objects.all().filter(user=request.user,status="confirmed")
-        
-        serializer = BookingSerializer(bookings,many = True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(bookings, request, view=self)
+        serializer = BookingSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def post(self,request):
         serializer = BookingSerializer(data = request.data)
@@ -55,13 +58,16 @@ class BookingRetrieveDestroy(APIView):
     
 
 class TicketListAPIView(APIView):
+    pagination_class = PaginationLimitOffset
     def get_permissions(self):
         return [IsAuthenticated()]
 
     def get(self, request):
         tickets = Ticket.objects.filter(booking__user=request.user)
-        serializer = TicketSerializer(tickets, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(tickets, request, view=self)
+        serializer = BookingSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
 class TicketRetrieveAPIView(APIView):
     def get_permissions(self):
