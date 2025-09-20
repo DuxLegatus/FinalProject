@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from Train.models import Train, Seat
 from django.contrib.auth.models import User
@@ -12,6 +13,7 @@ class Booking(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     booking_time = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
@@ -20,6 +22,16 @@ class Booking(models.Model):
     )
     class Meta:
         unique_together = ('schedule', 'seat','personal_number')
+    def save(self, *args, **kwargs):
+        if not self.price: 
+            base_price = self.schedule.price
+            class_type = self.seat.carriage.class_type
+            if class_type == "first":
+
+                self.price = base_price * Decimal("1.50")
+            else:
+                self.price = base_price
+        super().save(*args, **kwargs)
 
     def __str__(self):
          return f"Booking by {self.user} for {self.seat.carriage.train} seat {self.seat.seat_number} on {self.schedule.departure_time}"

@@ -17,7 +17,7 @@ class TrainSchedule(models.Model):
     departure_date = models.DateTimeField()
     arrival_time = models.DateTimeField()
     status = models.CharField(max_length=50,choices=[("on_time","On Time"),("delayed","Delayed"),("cancelled","Cancelled")],default="on_time")
-
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=20)
 
     def __str__(self):
         return f"{self.train} on {self.departure_date} from {self.starting_location} to {self.final_destination}"

@@ -18,9 +18,11 @@ class CarriageSerializer(serializers.ModelSerializer):
         return carriage
     
 class SeatSerializer(serializers.ModelSerializer):
+    class_type = serializers.CharField(source='carriage.class_type', read_only=True)
+    
     class Meta:
         model = Seat
-        fields = ["id",'carriage',"seat_number"]
+        fields = ["id",'carriage',"seat_number","class_type",]
         read_only_fields = ['id']
 
 
@@ -31,9 +33,15 @@ class TrainSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 class TrainScheduleSerializer(serializers.ModelSerializer):
+    train = TrainSerializer(read_only=True)
+    train_id = serializers.PrimaryKeyRelatedField(
+        queryset=Train.objects.all(),
+        write_only=True,
+        source="train"
+    )
     class Meta:
         model = TrainSchedule
-        fields = ["id","train","starting_location","final_destination","departure_date","arrival_time","status",]
+        fields = ["id","train","starting_location","train_id","final_destination","departure_date","arrival_time","status","price"]
         read_only_fields = ["id"]
         
 

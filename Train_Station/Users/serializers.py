@@ -75,3 +75,9 @@ class LogoutSerializer(serializers.Serializer):
             token.blacklist()
         except TokenError:
             self.fail('bad_token')
+
+
+class ContactSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100)
+    email = serializers.EmailField()
+    message = serializers.CharField()
