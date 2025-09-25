@@ -57,10 +57,13 @@ class BookingSerializer(serializers.ModelSerializer):
 
 class TicketSerializer(serializers.ModelSerializer):
     booking = BookingSerializer(read_only=True)
+    is_outdated = serializers.SerializerMethodField()
 
     class Meta:
         model = Ticket
-        fields = ["id","booking","train_schedule","ticket_number","issued_at",]
+        fields = ["id","booking","train_schedule","ticket_number","issued_at","is_outdated"]
         read_only_fields = ["id", "ticket_number", "issued_at"]
+    def get_is_outdated(self, obj):
+        return obj.is_outdated()
     
     

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from .models import Train,TrainSchedule,Seat,Carriage
 from .serializers import TrainSerializer,CarriageSerializer,SeatSerializer,TrainScheduleSerializer
 from rest_framework.views import APIView
@@ -90,7 +91,7 @@ class TrainScheduleListCreateAPIView(APIView):
         return [AllowAny()] 
 
     def get(self,request):
-        train_schedule = TrainSchedule.objects.all()
+        train_schedule = TrainSchedule.objects.filter(arrival_time__gte=timezone.now())
         starting_location = request.query_params.get("starting_location")
         final_destination = request.query_params.get("final_destination")
         departure_date = request.query_params.get("departure_date")

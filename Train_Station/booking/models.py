@@ -1,3 +1,4 @@
+from django.utils import timezone
 from decimal import Decimal
 from django.db import models
 from Train.models import Train, Seat
@@ -43,10 +44,14 @@ class Ticket(models.Model):
     ticket_number = models.CharField(max_length=20, unique=True,editable=False)
     issued_at = models.DateTimeField(auto_now_add=True)
 
+
     def save(self, *args, **kwargs):
         if not self.ticket_number:
             self.ticket_number = str(uuid.uuid4().hex[:16]).upper()
         super().save(*args, **kwargs)
+    def is_outdated(self):
+        return self.train_schedule.arrival_time < timezone.now()
+    
 
     def __str__(self):
         return f"Ticket {self.ticket_number} for {self.booking.user}"

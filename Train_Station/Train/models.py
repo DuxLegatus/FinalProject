@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone 
 # Create your models here.
 
 
@@ -16,11 +16,13 @@ class TrainSchedule(models.Model):
     final_destination = models.CharField(max_length=100)
     departure_date = models.DateTimeField()
     arrival_time = models.DateTimeField()
-    status = models.CharField(max_length=50,choices=[("on_time","On Time"),("delayed","Delayed"),("cancelled","Cancelled")],default="on_time")
+    status = models.CharField(max_length=50,choices=[("on_time","On Time"),("delayed","Delayed"),("cancelled","Cancelled"),("outdated","Outdated")],default="on_time")
     price = models.DecimalField(max_digits=10, decimal_places=2, default=20)
 
     def __str__(self):
         return f"{self.train} on {self.departure_date} from {self.starting_location} to {self.final_destination}"
+    def is_outdated(self): 
+        return self.arrival_time < timezone.now()
 
 
 class Carriage(models.Model):

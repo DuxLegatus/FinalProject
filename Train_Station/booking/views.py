@@ -20,6 +20,9 @@ class BookingListCreateView(APIView):
         return [IsAuthenticated()]
     def get(self,request):
         bookings = Booking.objects.all().filter(status="confirmed")
+        schedule_id = request.query_params.get("schedule_id")
+        if schedule_id:
+            bookings = bookings.filter(schedule_id=schedule_id)
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(bookings, request, view=self)
         serializer = BookingSerializer(page, many=True)
@@ -45,6 +48,7 @@ class BookingRetrieveDestroy(APIView):
     
     def get(self,request,pk):
         booking = self.get_object(pk)
+        
         if not booking:
             return Response({"detail": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
         if booking.user != request.user:
@@ -70,7 +74,7 @@ class TicketListAPIView(APIView):
         return [IsAuthenticated()]
 
     def get(self, request):
-        tickets = Ticket.objects.filter(booking__user=request.user)
+        tickets = Ticket.objects.filter(booking__user=request.user,booking__status="confirmed")
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(tickets, request, view=self)
         serializer = TicketSerializer(page, many=True)
