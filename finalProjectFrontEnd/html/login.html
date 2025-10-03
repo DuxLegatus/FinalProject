@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">TrainStation</div>
+    <nav>
+      <ul id="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">search</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="mytickets.html">My tickets</a></li>
+
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="form-container">
+      <h2>Login</h2>
+      <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p id="message"></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 TrainStation. All rights reserved.</p>
+  </footer>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Booking</title>
+  <link rel="stylesheet" href="../css/passenger.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">TrainStation</div>
+    <nav>
+      <ul>
+        <ul id="nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="search.html">search</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="mytickets.html">My tickets</a></li>
+
+        </ul>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <h2>Train Booking</h2>
+
+    <div id="scheduleDetails" class="schedule-info"></div>
+
+    <form id="bookingForm" class="booking-form">
+      <input type="text" id="first_name" placeholder="First Name" required>
+      <input type="text" id="last_name" placeholder="Last Name" required>
+      <input type="text" id="personal_number" placeholder="Personal Number" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="text" id="phone" placeholder="Phone" required>
+      <button type="button" id="chooseSeatBtn">Choose Seat</button>
+      <button type="submit">Book Now</button>
+    </form>
+
+    <p id="message"></p>
+
+
+    <div id="seatModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3>Select Your Seat</h3>
+
+
+        <div id="carriageList" class="carriage-list"></div>
+
+
+        <div class="seat-carriage">
+          <div class="roof"></div>
+          <div id="seatGrid" class="seat-grid"></div>
+          <div class="floor"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2025 TrainStation. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/passenger.js"></script>
+</body>
+
+</html>

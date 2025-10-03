@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay for Ticket</title>
+    <link rel="stylesheet" href="../css/pay.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Payment Page</h2>
+
+        <div id="ticketInfo" class="ticket-info">
+
+        </div>
+
+        <div class="payment-form">
+            <h3>Credit Card Details </h3>
+            <input type="text" placeholder="Card Number" id="cardNumber">
+            <input type="text" placeholder="MM/YY" id="expiry">
+            <input type="text" placeholder="CVV" id="cvv">
+
+            <button id="payBtn">Pay</button>
+            <button id="downloadBtn" disabled>Download Ticket PDF</button>
+        </div>
+
+        <p id="message"></p>
+    </div>
+
+    <script src="../js/pay.js"></script>
+</body>
+</html>

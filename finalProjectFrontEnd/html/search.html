@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Train Search</title>
+  <link rel="stylesheet" href="../css/search.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">TrainStation</div>
+    <nav>
+      <ul id="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">search</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="mytickets.html">My tickets</a></li>
+
+      </ul>
+    </nav>
+  </header>
+  <div class="searchForm">
+    <h1>Search for Train Flights</h1>
+
+    <form id="searchForm">
+      <label for="starting_location">Starting Location</label>
+      <input type="text" id="starting_location" name="starting_location" placeholder="Enter starting city" required>
+
+      <label for="final_destination">Final Destination</label>
+      <input type="text" id="final_destination" name="final_destination" placeholder="Enter final city" required>
+
+      <label for="departure_date">Departure Date</label>
+      <input type="date" id="departure_date" name="departure_date">
+
+      <button type="submit">Find Train</button>
+    </form>
+  </div>
+
+  <div id="results">
+  </div>
+  <footer>
+    <p>&copy; 2025 TrainStation. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/search.js"></script>
+</body>
+
+</html>
